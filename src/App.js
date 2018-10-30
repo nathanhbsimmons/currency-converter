@@ -7,11 +7,17 @@ class App extends Component {
         result: null,
         fromCurrency: "USD",
         toCurrency: "GBP",
-        amount: null,
+        amount: '',
         currencies: [],
         currentRates: [],
         error: null
     };
+
+    // Initializes the currencies with values from the api
+    componentDidMount() {
+        this.getDataFromApi()
+    }
+    
     getDataFromApi=()=>{
       fetch('https://gist.githubusercontent.com/mddenton/062fa4caf150bdf845994fc7a3533f74/raw/27beff3509eff0d2690e593336179d4ccda530c2/Common-Currency.json')
         .then(response => response.json())
@@ -30,22 +36,13 @@ class App extends Component {
           this.setState({ currentRates: currentRates })})
         .catch(err => console.log("Oops, couldn't fetch current rates", err.message))    
     }
-    // Initializes the currencies with values from the api
-    componentDidMount() {
-        this.getDataFromApi()
-      
-    }
 
-   
     convertCurrencyHandler = () => {
       if(!this.state.currentRates[0][this.state.toCurrency]){
         this.setState({ error: "Currency rate not currently available!" })
     } else if (this.state.fromCurrency !== this.state.toCurrency) {
                     this.setState({ error: null })
-                    // console.log(this.state.currentRates[0][this.state.toCurrency])
-                    // const result = fx.convert(this.state.amount, {from: this.state.fromCurrency, to: this.state.toCurrency});
                     const result = this.state.amount * this.state.currentRates[0][this.state.toCurrency]
-                    //toFixed() rounds the last digit...need to find solution that doesn't round
                     this.setState({ result: result.toFixed(2) }) 
         } else {
           this.setState({ error: "You cant convert the same currency!" })
@@ -63,12 +60,10 @@ class App extends Component {
 
     displayToCurrencySymbol = () => {
       return this.state.currencies.map((currency, i) =>{
-      
-          if(currency.code == this.state.toCurrency){
-           
+          if(currency.code == this.state.toCurrency){           
             return <span key={i} className="currencySymbol">{currency.symbol}</span>
           }
-      }
+       }
      )
     }
 
@@ -99,8 +94,9 @@ class App extends Component {
             this.setState({ toCurrency: e.target.value })
         }
     }
-  
-    getNumberFromValue = (value = '') => {return value.replace(/(-(?!\d))|[^0-9|-]/g, '') || ''}
+    
+    
+    removeDecimalFromNumber = (value = '') => {return value.replace(/(-(?!\d))|[^0-9|-]/g, '') || ''}
 
     addLeadingZeros = (number) => {
       const desiredLength = 3
@@ -128,7 +124,7 @@ class App extends Component {
     }
 
     currencyInputHandler = (e) => {
-      const number = this.getNumberFromValue(e.target.value)
+      const number = this.removeDecimalFromNumber(e.target.value)
       const numberWithPadding = this.addLeadingZeros(number)
       this.setState({ amount: this.addDecimalToNumber(numberWithPadding)})
     }
