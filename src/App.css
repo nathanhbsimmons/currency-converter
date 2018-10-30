@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css?family=Cutive+Mono');
+
+
+body {
+  font-family:'Cutive Mono', monospace;
+  
+  margin: 0 auto;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color:  rgb(26,26,35)
+}
+
+button {
+  border-radius: 1px;
+}
+
+h1 {
+  font-size: 2.25em
+}
+
+.container {
+  color:rgb(26,26,35);
+  border: 10px double rgb(26,26,35);
+  background-color:  rgb(255,250,240);
+  text-align: center;
+  padding: 3em;
+  padding-top: 2em;
+  margin-bottom: 10em;
+  border-radius: 1px;
+  height: 15em;
+  width: 25em
+}
+
+.convertForm {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.currencySymbol {
+  padding: .25em
+}
